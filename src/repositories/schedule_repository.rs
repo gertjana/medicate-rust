@@ -29,7 +29,7 @@ impl MedicineScheduleRepository {
         let value = serde_json::to_string(&schedule)?;
         
         let mut conn = self.get_connection().await?;
-        conn.set(&key, value).await?;
+        let _: () = conn.set(&key, value).await?;
         
         Ok(schedule.id)
     }
@@ -78,7 +78,7 @@ impl MedicineScheduleRepository {
         let value = serde_json::to_string(&schedule)?;
         
         let mut conn = self.get_connection().await?;
-        conn.set(&key, value).await?;
+        let _: () = conn.set(&key, value).await?;
         
         Ok(true)
     }
@@ -86,7 +86,7 @@ impl MedicineScheduleRepository {
     pub async fn delete(&self, id: &str) -> Result<()> {
         let key = format!("{}{}", self.prefix, id);
         let mut conn = self.get_connection().await?;
-        conn.del(&key).await?;
+        let _: () = conn.del(&key).await?;
         
         Ok(())
     }

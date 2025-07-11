@@ -25,12 +25,12 @@ impl DosageHistoryRepository {
         let history = api_history.to_dosage_history(
             uuid::Uuid::new_v4().to_string(),
             String::new()
-        );
+        )?;
         let key = format!("{}{}", self.prefix, history.id);
         let value = serde_json::to_string(&history)?;
         
         let mut conn = self.get_connection().await?;
-        conn.set(&key, value).await?;
+        let _: () = conn.set(&key, value).await?;
         
         Ok(history.id)
     }
@@ -76,7 +76,7 @@ impl DosageHistoryRepository {
     pub async fn delete(&self, id: &str) -> Result<()> {
         let key = format!("{}{}", self.prefix, id);
         let mut conn = self.get_connection().await?;
-        conn.del(&key).await?;
+        let _: () = conn.del(&key).await?;
         
         Ok(())
     }

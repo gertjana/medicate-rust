@@ -36,3 +36,5 @@ chrono = { version = "0.4", features = ["serde"] }
 
 [dev-dependencies]
 redis = { version = "0.24", features = ["tokio-comp", "cluster"] }
+tokio-test = "0.4"
+wiremock = "0.5"
