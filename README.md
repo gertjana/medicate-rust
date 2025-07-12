@@ -57,3 +57,5 @@ cargo build --release
 docker build -t medicate-rust .
 docker run -p 8080:8080 medicate-rust
 ``` 
+
+if on an ARM architecture (MacOS M?) then add `--platform linux/amd64` to both build and run
