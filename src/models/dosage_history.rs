@@ -1,5 +1,5 @@
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc, TimeZone};
+use chrono::{DateTime, Utc};
 use crate::models::medicine::MedicineId;
 
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
@@ -73,6 +73,7 @@ impl ApiDosageHistory {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use chrono::TimeZone;
 
     #[test]
     fn test_dosage_history_with_id() {
@@ -94,9 +95,9 @@ mod tests {
 
     #[test]
     fn test_dosage_history_ordering() {
-        let datetime1 = Utc.ymd(2024, 1, 15).and_hms(8, 0, 0);
-        let datetime2 = Utc.ymd(2024, 1, 15).and_hms(12, 0, 0);
-        let datetime3 = Utc.ymd(2024, 1, 10).and_hms(8, 0, 0);
+        let datetime1 = Utc.with_ymd_and_hms(2024, 1, 15, 8, 0, 0).unwrap();
+        let datetime2 = Utc.with_ymd_and_hms(2024, 1, 15, 12, 0, 0).unwrap();
+        let datetime3 = Utc.with_ymd_and_hms(2024, 1, 10, 8, 0, 0).unwrap();
 
         let history1 = DosageHistory::with_id(
             "id1".to_string(),
@@ -137,7 +138,7 @@ mod tests {
         
         let id = "custom-history-id".to_string();
         let description = "Test description".to_string();
-        let datetime = Utc.ymd(2024, 1, 20).and_hms(14, 30, 0);
+        let datetime = Utc.with_ymd_and_hms(2024, 1, 20, 14, 30, 0).unwrap();
         let history = api_history.to_dosage_history(id.clone(), description.clone()).unwrap();
         
         assert_eq!(history.id, id);
@@ -149,7 +150,7 @@ mod tests {
 
     #[test]
     fn test_dosage_history_serialization() {
-        let datetime = Utc.ymd(2024, 1, 15).and_hms(9, 0, 0);
+        let datetime = Utc.with_ymd_and_hms(2024, 1, 15, 9, 0, 0).unwrap();
         let history = DosageHistory::with_id(
             "test-id".to_string(),
             datetime,
@@ -187,9 +188,9 @@ mod tests {
 
     #[test]
     fn test_dosage_history_equality() {
-        let datetime1 = Utc.ymd(2024, 1, 15).and_hms(8, 0, 0);
-        let datetime2 = Utc.ymd(2024, 1, 15).and_hms(8, 0, 0);
-        let datetime3 = Utc.ymd(2024, 1, 16).and_hms(8, 0, 0); // different date
+        let datetime1 = Utc.with_ymd_and_hms(2024, 1, 15, 8, 0, 0).unwrap();
+        let datetime2 = Utc.with_ymd_and_hms(2024, 1, 15, 8, 0, 0).unwrap();
+        let datetime3 = Utc.with_ymd_and_hms(2024, 1, 16, 8, 0, 0).unwrap(); // different date
 
         let history1 = DosageHistory::with_id(
             "id1".to_string(),
@@ -216,8 +217,8 @@ mod tests {
 
     #[test]
     fn test_dosage_history_partial_ord() {
-        let datetime1 = Utc.ymd(2024, 1, 15).and_hms(8, 0, 0);
-        let datetime2 = Utc.ymd(2024, 1, 15).and_hms(12, 0, 0);
+        let datetime1 = Utc.with_ymd_and_hms(2024, 1, 15, 8, 0, 0).unwrap();
+        let datetime2 = Utc.with_ymd_and_hms(2024, 1, 15, 12, 0, 0).unwrap();
         let h1 = DosageHistory { id: "".to_string(), datetime: datetime1, medicine_id: "".to_string(), description: "".to_string(), amount: 0.0 };
         let h2 = DosageHistory { id: "".to_string(), datetime: datetime2, medicine_id: "".to_string(), description: "".to_string(), amount: 0.0 };
         assert!(h2 > h1);
